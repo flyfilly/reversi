@@ -51,7 +51,7 @@
 
       .piece {
         border-radius: 50%;
-        border: outset 3px lightgrey;
+        border: outset 3px white;
       }
 
       .shadow {
@@ -89,15 +89,19 @@
 
         div.addEventListener("click", e => {
           const elem = e.target;
-          const hw = e.target.clientHeight - 20;
-          let piece = document.createElement("div");
-          piece.className = "piece";
-          piece.style.height = `${hw}px`;
-          piece.style.width = `${hw}px`;
-          piece.style.backgroundColor = turn === "W" ? "white" : "black";
-          elem.innerHTML = "";
-          elem.appendChild(piece);
-          turn = turn === "W" ? "B" : "W";
+          const [x, y] = elem.id.split(",");
+          if (x && y && !arr[x][y]) {
+            arr[x][y] = turn;
+            const hw = e.target.clientHeight - 20;
+            let piece = document.createElement("div");
+            piece.className = "piece";
+            piece.style.height = `${hw}px`;
+            piece.style.width = `${hw}px`;
+            piece.style.backgroundColor = turn === "W" ? "white" : "black";
+            elem.innerHTML = "";
+            elem.appendChild(piece);
+            turn = turn === "W" ? "B" : "W";
+          }
         });
 
         board.append(div);
