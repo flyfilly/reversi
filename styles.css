@@ -2,16 +2,13 @@ html,
 body {
   height: 100%;
   background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #size {
   padding: 3em;
-}
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .cell {
