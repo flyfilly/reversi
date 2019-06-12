@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      #size {
+        padding: 3em;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cell {
+        border: lightgreen inset 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #339933;
+        transition: background-color 0.25s ease-in;
+      }
+
+      .cell:hover {
+        cursor: pointer;
+        background-color: green;
+        transition: background-color 0.25s ease-in;
+      }
+
+      #board {
+        padding: 10px;
+        background-color: lightgreen;
+        display: grid;
+        grid-gap: 2px;
+        justify-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="number" id="size" placeholder="Grid Size?" />
+    <div id="board"></div>
+  </body>
+  <script>
+    const board = document.getElementById("board");
+    let arr = [];
+    let size = 0;
+
+    document.getElementById("size").addEventListener("change", e => {
+      size = parseInt(e.target.value);
+      if (size && 0 < size) e.target.style.display = "none";
+      board.innerHTML = "";
+      board.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+      for (let row = 0; row < size; row++) {
+        arr[row] = [];
+        for (let cell = 0; cell < size; cell++) {
+          let div = document.createElement("div");
+          arr[row].push(null);
+          let screen =
+            document.documentElement.clientHeight -
+            document.documentElement.clientHeight / 4;
+          let hw = screen / size;
+          div.style.height = `${hw}px`;
+          div.style.width = `${hw}px`;
+          div.id = `${row},${cell}`;
+          div.className = "cell";
+          div.innerText = `${row},${cell}`;
+
+          div.addEventListener("click", e => {
+            console.log(e);
+          });
+
+          board.append(div);
+        }
+      }
+
+      console.log(arr);
+    });
+  </script>
+</html>
