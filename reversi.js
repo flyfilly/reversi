@@ -1,6 +1,7 @@
 const board = document.getElementById("board");
 let gameBoard = [];
 let turn = "W";
+let path = [];
 const size = 8;
 
 board.innerHTML = "";
@@ -27,7 +28,6 @@ for(let row = 0; row < size; row++) {
             
             if(row && cell && !gameBoard[row][cell] && isValidMove(square)) {
                 placePiece(square);
-                console.log(gameBoard);
             }
         });
     }
@@ -58,14 +58,28 @@ function placePiece(square) {
 
     if("W" === turn) {
         piece.style.backgroundColor = "white";
+        flipPieces("white");
         turn = "B";
     } else {
         piece.style.backgroundColor = "black";
+        flipPieces("black");
         turn = "W";
     }
 
     square.append(piece);
+    console.log(gameBoard);
 
+}
+
+function flipPieces(color) {
+    path.forEach(element => {
+        const [row, cell] = element.id.split(",");
+        gameBoard[row][cell] = turn;
+        let piece = [...element.childNodes].pop();
+        piece.style.backgroundColor = color;
+    });
+
+    path = [];
 }
 
 function isValidMove(square) {
@@ -74,6 +88,7 @@ function isValidMove(square) {
     
     //go left
     for(let i = cell - 1; i >= 0; i--) {
+        path.push(document.getElementById(`${row},${i}`));
         if(i === cell - 1) {
             console.log("It's the first iteration");
             if(!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
@@ -82,10 +97,14 @@ function isValidMove(square) {
             }
             console.log("It's good");
         } else {
+            if(gameBoard[row][i] === turn) {
+                break;
+            }
             console.log("it's after the first iteration");
         }
     }
 
+    //return true if index is zero and the color is the turn else return false
     return true;
 }
 
