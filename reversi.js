@@ -85,6 +85,7 @@ function flipPieces(color) {
 function isValidMove(square) {
     const [row, cell] = square.id.split(",");
     const opponent = turn === "W" ? "B" : "W";
+    let validMove = true;
     
     //go left
     for(let i = cell - 1; i >= 0; i--) {
@@ -93,7 +94,7 @@ function isValidMove(square) {
             console.log("It's the first iteration");
             if(!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
                 console.log("It's not so good");
-                return false;
+                validMove = false;
             }
             console.log("It's good");
         } else {
@@ -104,8 +105,7 @@ function isValidMove(square) {
         }
     }
 
-    //return true if index is zero and the color is the turn else return false
-    return true;
+    return validMove;
 }
 
 
