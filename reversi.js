@@ -76,38 +76,41 @@ function flipPieces(color) {
     let piece = [...element.childNodes].pop();
     piece.style.backgroundColor = color;
   });
-
-  path = [];
 }
 
 function isValidMove(square) {
-  path = [];
-  const [row, cell] = square.id.split(',');
-  const opponent = turn === 'W' ? 'B' : 'W';
+    //check every direction, and if true, flip pieces then check next direction.
+    return check("left") || check("right");
+}
 
-  //go left
-  // Jacob's Edit
-  //powells comment
-  for (let i = cell - 1; i >= 0; i--) {
-    if (!gameBoard[row][i] || (i === 0 && turn === opponent)) {
-      return false;
-    }
+function check(direction) {
+    path = [];
+    const [row, cell] = square.id.split(',');
+    const opponent = turn === 'W' ? 'B' : 'W';
 
-    if (i === cell - 1) {
-      if (!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
-        return false;
-      }
-    } else {
-      if (gameBoard[row][i] === turn) {
+    for (let i = cell - 1; i >= 0; i--) {
+        if ((i === 0 && turn === opponent)) {
+            console.log("returned on 89");
+            return false;
+        }
+
+        if (i === cell - 1) {
+            if (!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
+            console.log("returned on 95");
+            return false;
+            }
+        } else {
+            if (gameBoard[row][i] === turn) {
+            path.push(document.getElementById(`${row},${i}`));
+            console.log("returned on 101");
+            return true;
+            }
+        }
+
         path.push(document.getElementById(`${row},${i}`));
-        return true;
-      }
     }
 
-    path.push(document.getElementById(`${row},${i}`));
-  }
-
-  return true;
+    return true;
 }
 
 initialize();
