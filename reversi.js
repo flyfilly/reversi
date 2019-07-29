@@ -87,7 +87,7 @@ function isValidMove(square) {
 
   //go left
   // Jacob's Edit
-  
+  //powells comment
   for (let i = cell - 1; i >= 0; i--) {
     if (!gameBoard[row][i] || (i === 0 && turn === opponent)) {
       return false;
