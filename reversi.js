@@ -86,6 +86,8 @@ function isValidMove(square) {
   const opponent = turn === 'W' ? 'B' : 'W';
 
   //go left
+  // Jacob's Edit
+  
   for (let i = cell - 1; i >= 0; i--) {
     if (!gameBoard[row][i] || (i === 0 && turn === opponent)) {
       return false;
