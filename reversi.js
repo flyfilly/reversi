@@ -1,7 +1,6 @@
 const board = document.getElementById('board');
 let gameBoard = [];
 let turn = 'W';
-let path = [];
 const size = 8;
 
 board.innerHTML = '';
@@ -25,9 +24,10 @@ for (let row = 0; row < size; row++) {
 
     div.addEventListener('click', (event) => {
       const square = event.target;
+      const path = isValidMove(square);
 
-      if (row && cell && !gameBoard[row][cell] && isValidMove(square)) {
-        placePiece(square);
+      if (row && cell && !gameBoard[row][cell] && path.length > 0) {
+        placePiece(square, path);
       }
     });
   }
@@ -44,10 +44,11 @@ function initialize() {
   placePiece(document.getElementById('4,3'));
 }
 
-function placePiece(square) {
+function placePiece(square, path) {
+  console.log(square, path);
   let piece = document.createElement('div');
   let hw = square.clientHeight - square.clientHeight / 4;
-
+  
   const [row, cell] = square.id.split(',');
   gameBoard[row][cell] = turn;
 
@@ -56,20 +57,20 @@ function placePiece(square) {
   piece.style.height = `${hw}px`;
   piece.style.width = `${hw}px`;
 
+  square.append(piece);
+
   if ('W' === turn) {
     piece.style.backgroundColor = 'white';
-    flipPieces('white');
+    flipPieces('white', path);
     turn = 'B';
   } else {
     piece.style.backgroundColor = 'black';
-    flipPieces('black');
+    flipPieces('black', path);
     turn = 'W';
   }
-
-  square.append(piece);
 }
 
-function flipPieces(color) {
+function flipPieces(color, path = []) {
   path.forEach((element) => {
     const [row, cell] = element.id.split(',');
     gameBoard[row][cell] = turn;
@@ -80,37 +81,37 @@ function flipPieces(color) {
 
 function isValidMove(square) {
     //check every direction, and if true, flip pieces then check next direction.
-    return check("left") || check("right");
+    return check("left", square) || check("right", square);
 }
 
-function check(direction) {
-    path = [];
+function check(direction, square) {
     const [row, cell] = square.id.split(',');
     const opponent = turn === 'W' ? 'B' : 'W';
+    const path = [square];
 
     for (let i = cell - 1; i >= 0; i--) {
-        if ((i === 0 && turn === opponent)) {
+        if (!gameBoard[row][i] || (i === 0 && turn !== gameBoard[row][i])) {
             console.log("returned on 89");
-            return false;
+            return [];
         }
 
         if (i === cell - 1) {
             if (!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
-            console.log("returned on 95");
-            return false;
+              console.log("returned on 95");
+              return [];
             }
         } else {
             if (gameBoard[row][i] === turn) {
-            path.push(document.getElementById(`${row},${i}`));
-            console.log("returned on 101");
-            return true;
+              path.push(document.getElementById(`${row},${i}`));
+              console.log("returned on 101");
+              return path;
             }
         }
 
         path.push(document.getElementById(`${row},${i}`));
     }
 
-    return true;
+    return path;
 }
 
 initialize();
