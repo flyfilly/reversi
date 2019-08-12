@@ -81,7 +81,12 @@ function flipPieces(color, path = []) {
 
 function isValidMove(square) {
     //check every direction, and if true, flip pieces then check next direction.
-    return check("right", square) ;
+    let path = [];
+
+    path = [...path, ...check("left", square)];
+    path = [...path, ...check("right", square)];
+    console.log("LOOK AT ME HERE:", path);
+    return path;
 }
 
 function check(direction, square) {
@@ -95,19 +100,19 @@ function check(direction, square) {
     if(direction === 'left') {
       for (let i = cell - 1; i >= 0; i--) {
           if (!gameBoard[row][i] || (i === 0 && turn !== gameBoard[row][i])) {
-              console.log("returned on 89");
+              console.log("returned on 103");
               return [];
           }
 
           if (i === cell - 1) {
               if (!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
-                console.log("returned on 95");
+                console.log("returned on 109");
                 return [];
               }
           } else {
               if (gameBoard[row][i] === turn) {
                 path.push(document.getElementById(`${row},${i}`));
-                console.log("returned on 101");
+                console.log("returned on 115");
                 return path;
               }
           }
@@ -118,21 +123,22 @@ function check(direction, square) {
 
     if(direction === 'right') {
       for (let i = parseInt(cell) + 1; i <= 8; i++) {
-        console.log("Piece", gameBoard[row][i]);
-        if (!gameBoard[row][i] || (i === 0 && turn !== gameBoard[row][i])) {
-            console.log("returned on 89");
+        console.log("THIS Piece", gameBoard[row][i], document.getElementById(`${row},${i}`));
+        if (!gameBoard[row][i] || (i === 8 && turn !== gameBoard[row][i])) {
+            console.log("returned on 128");
             return [];
         }
 
-        if (i === cell - 1) {
+        //is this the first cell we check?
+        if (i === parseInt(cell) + 1) {
             if (!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
-              console.log("returned on 95");
+              console.log("returned on 134");
               return [];
             }
         } else {
             if (gameBoard[row][i] === turn) {
               path.push(document.getElementById(`${row},${i}`));
-              console.log("returned on 101");
+              console.log("returned on 140");
               return path;
             }
         }
