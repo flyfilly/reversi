@@ -85,34 +85,34 @@ function isValidMove(square) {
 
     path = [...path, ...check("left", square)];
     path = [...path, ...check("right", square)];
+    path = [...path, ...check("up", square)];
     console.log("LOOK AT ME HERE:", path);
     return path;
 }
 
 function check(direction, square) {
-    const [row, cell] = square.id.split(',');
+    let [row, cell] = square.id.split(',');
     const opponent = turn === 'W' ? 'B' : 'W';
     const path = [square];
 
-    console.log(direction, square);
-
-
+    cell = parseInt(cell);
+    
     if(direction === 'left') {
       for (let i = cell - 1; i >= 0; i--) {
           if (!gameBoard[row][i] || (i === 0 && turn !== gameBoard[row][i])) {
-              console.log("returned on 103");
+              console.log("returned on 102");
               return [];
           }
 
           if (i === cell - 1) {
               if (!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
-                console.log("returned on 109");
+                console.log("returned on 108");
                 return [];
               }
           } else {
               if (gameBoard[row][i] === turn) {
                 path.push(document.getElementById(`${row},${i}`));
-                console.log("returned on 115");
+                console.log("returned on 114");
                 return path;
               }
           }
@@ -122,7 +122,7 @@ function check(direction, square) {
     }
 
     if(direction === 'right') {
-      for (let i = parseInt(cell) + 1; i <= 8; i++) {
+      for (let i = cell + 1; i <= 8; i++) {
         console.log("THIS Piece", gameBoard[row][i], document.getElementById(`${row},${i}`));
         if (!gameBoard[row][i] || (i === 8 && turn !== gameBoard[row][i])) {
             console.log("returned on 128");
@@ -130,7 +130,7 @@ function check(direction, square) {
         }
 
         //is this the first cell we check?
-        if (i === parseInt(cell) + 1) {
+        if (i === cell + 1) {
             if (!gameBoard[row][i] || gameBoard[row][i] !== opponent) {
               console.log("returned on 134");
               return [];
@@ -147,7 +147,29 @@ function check(direction, square) {
       }
     }
 
+    if(direction === 'up') {
+      for (let i = row - 1; i >= 0; i--) {
+          if (!gameBoard[i][cell] || (i === 0 && turn !== gameBoard[i][cell])) {
+              console.log("returned on 152");
+              return [];
+          }
 
+          if (i === row - 1) {
+              if (!gameBoard[i][cell] || gameBoard[i][cell] !== opponent) {
+                console.log("returned on 158");
+                return [];
+              }
+          } else {
+              if (gameBoard[i][cell] === turn) {
+                path.push(document.getElementById(`${i},${cell}`));
+                console.log("returned on 164");
+                return path;
+              }
+          }
+
+          path.push(document.getElementById(`${i},${cell}`));
+      }
+    }
 
     
 
